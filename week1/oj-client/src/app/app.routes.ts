@@ -15,7 +15,7 @@ const routes: Routes = [
 	{
 		path: 'problems/:id',
 		component: ProblemDetailComponent
-	}
+	},
 	{
 		path: '**',
 		redirectTo: 'problems'
