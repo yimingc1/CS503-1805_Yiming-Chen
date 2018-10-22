@@ -17,7 +17,7 @@ module.exports = function(io) {
 		// console.log(message);
 
 		// // reply to socket.id, emit message 'hehe from server' to client side.
-		// io.to(socket.id).emit('message', 'hehe from server');
+		// io.to(socket.id).emit('message', 'hehe from backend server');
 
 		// get the session id i.e. problem id in URL
 		let sessionId = socket.handshake.query['sessionId'];
