@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 // import router to get the url
 import { ActivatedRoute, Params } from '@angular/router';
 import { CollaborationService } from '../../services/collaboration.service';
+import { DataService } from '../../services/data.service';
+
 declare var ace: any;
 
 @Component({
@@ -15,6 +17,7 @@ export class EditorComponent implements OnInit {
 	sessionID: string;
 	public languages: string[] = ['Java', 'Python'];
 	language: string = 'Java';
+  output: string = '';
 
 	defaultContent = {
 		'Java': `public class Example {
@@ -29,7 +32,8 @@ export class EditorComponent implements OnInit {
 	}
 
 	// inject collaboration service and route service
-  constructor(private collaboration: CollaborationService, private route: ActivatedRoute) { }
+  constructor(private collaboration: CollaborationService, private route: ActivatedRoute, 
+    private dataService: DataService) { }
 
   // use problem id as session id 
   // subscribe to params, so that when it changes, the session id get updated
@@ -39,6 +43,10 @@ export class EditorComponent implements OnInit {
   			this.sessionID = params['id'];
   			this.initEditor();
   		})
+
+     // restore buffer from backend when initialize the editor
+     // when new participant appears, get others work from backend.
+     this.collaboration.restoreBuffer();
   }
 
   initEditor(): void {
@@ -80,5 +88,15 @@ export class EditorComponent implements OnInit {
   submit(): void {
   	let usercode = this.editor.getValue();
   	console.log(usercode);
+
+    // create object that contains code and lang
+    // send this to server
+    const data = {
+      code: usercode,
+      lang: this.language.toLowerCase()
+    }
+
+    this.dataService.buildAndRun(data).then(res => this.output = res);
+  }
   }
 }

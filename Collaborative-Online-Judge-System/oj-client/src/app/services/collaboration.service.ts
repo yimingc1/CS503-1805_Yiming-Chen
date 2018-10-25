@@ -32,6 +32,13 @@ export class CollaborationService {
 
   change(delta: string): void {
   	// emit the change evnet
+  	console.log('send message' + delta);
   	this.collaborationSocket.emit('change', delta);
+  }
+  
+  // restore buffer from redis cache
+  restoreBuffer(): void {
+  	// send messages to backend server
+  	this.collaborationSocket.emit("restoreBuffer");
   }
 }
